@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-122",
+  "sanitizer": "ASAN",
+  "bug_class": "heap-buffer-overflow",
+  "target_file": "src/lib/openjp2/tcd.c",
+  "target_function": "opj_tcd_mct_decode",
+  "patch_hunk": "28094e1ebfa420f9a0bdc7a11b8d4ee5f154db35",
+  "vul_stack_fingerprint": "sha256:9be070a75edef0541c4c2300"
+}

@@ -1,0 +1,21 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x613000001848",
+  "top_frames": [
+    "opj_tcd_mct_decode",
+    "opj_tcd_decode_tile",
+    "opj_j2k_decode_tile",
+    "opj_j2k_decode",
+    "opj_decode",
+    "main"
+  ],
+  "stack_fingerprint": "sha256:9be070a75edef0541c4c2300",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x613000001848 thread T0\nREAD at 0x613000001848 thread T0\n    #0 in opj_tcd_mct_decode src/lib/openjp2/tcd.c\n    #1 in opj_tcd_decode_tile src/lib/openjp2/tcd.c\n    #2 in opj_j2k_decode_tile src/lib/openjp2/j2k.c\n    #3 in opj_j2k_decode src/lib/openjp2/j2k.c\n    #4 in opj_decode src/lib/openjp2/openjpeg.c\n    #5 in main\n\nDEDUP_TOKEN: opj_tcd_mct_decode--opj_tcd_decode_tile--opj_j2k_decode_tile\n0x613000001848 is located 0 bytes to the right of a heap region\nallocated by thread T0",
+  "reaches_target": null,
+  "exploit_primitive": null
+}
