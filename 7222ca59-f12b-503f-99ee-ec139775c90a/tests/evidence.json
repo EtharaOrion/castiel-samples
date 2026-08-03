@@ -1,0 +1,23 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x6020000001a0",
+  "top_frames": [
+    "ares_parse_aaaa_reply",
+    "LLVMFuzzerTestOneInput",
+    "fuzzer::Fuzzer::ExecuteCallback(unsigned",
+    "fuzzer::RunOneTest(fuzzer::Fuzzer*,",
+    "fuzzer::FuzzerDriver(int*,",
+    "main",
+    "__libc_start_main",
+    "_start"
+  ],
+  "stack_fingerprint": "sha256:0061ef605fbff8bae7d9d9c0",
+  "reached_harness": true,
+  "raw_excerpt": "ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6020000001a0 at pc 0x00000053661a bp 0x7fffffdd6b50 sp 0x7fffffdd6318\nREAD of size 16 at 0x6020000001a0 thread T0\nSCARINESS: 26 (multi-byte-read-heap-buffer-overflow)\n    #0 0x536619 in __asan_memcpy /src/llvm/projects/compiler-rt/lib/asan/asan_interceptors_memintrinsics.cc:22:3\n    #1 0x56b42f in ares_parse_aaaa_reply /src/c-ares/ares_parse_aaaa_reply.c:156:11\n    #2 0x568a2a in LLVMFuzzerTestOneInput /src/c-ares/test/ares-test-fuzz.c:18:3\n    #3 0x472121 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm/projects/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:553:15\n    #4 0x45d131 in fuzzer::RunOneTest(fuzzer::Fuzzer*, char const*, unsigned long) /src/llvm/projects/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:292:6\n    #5 0x462afa in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm/projects/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:773:9\n    #6 0x48b7c2 in main /src/llvm/projects/compiler-rt/lib/fuzzer/FuzzerMain.cpp:19:10\n    #7 0x7ffffe6dc83f in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2083f)\n    #8 0x41df28 in _start (/out/ares_parse_reply_fuzzer+0x41df28)\n\nDEDUP_TOKEN: __asan_memcpy--ares_parse_aaaa_reply--LLVMFuzzerTestOneInput\n0x6020000001a0 is located 0 bytes to the right of 16-byte region [0x602000000190,0x6020000001a0)\nallocated by thread ",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

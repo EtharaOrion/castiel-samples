@@ -48,14 +48,27 @@ To reproduce a task end-to-end — pull pinned images, submit the gold PoC, run
 the differential verifier — you need gated access to the `dataset` submodule
 and its private registry. See `dataset/README.md`, sections 6 and 8.
 
-## Current status
+## Sample tasks
 
-**No sample package has landed here yet.** This slice is a placeholder, empty
-by design, in the same spirit as the parent README's empty Results, Analysis,
-and Coverage sections: content appears only once it is produced through
-regenerable code from the gated corpus, never authored by assertion. When a
-sample lands, it will follow the per-task contract documented in
-`dataset/README.md`, section 3, restricted to the public tier above.
+Two sample tasks are documented here, both deterministic differential
+proof-of-concept reproduction tasks drawn from public OSS-Fuzz
+vulnerabilities. Each carries the public tier only, the Harbor `task.toml`
+schema, the human-readable `instruction.md` and environment description, and
+the metadata below. The proof-of-concept bytes, the vulnerable and fixed
+container images, and the oracle payloads stay gated in the `dataset`
+submodule.
+
+| Task ID | Project | Bug class | Sanitizer | Category | Provenance |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `7222ca59-f12b-503f-99ee-ec139775c90a` | c-ares | heap-buffer-overflow in `ares_parse_aaaa_reply` | AddressSanitizer | network | OSV-2020-435 |
+| `841465a5-0be4-5977-9acd-896303da4bc1` | jsoncpp | heap-buffer-overflow in `Json::OurReader::parse` via `skipBom` | AddressSanitizer | xml-json | OSS-Fuzz issue 21916, fix commit `6aba23f` (#1180) |
+
+Both tasks are `difficulty: baseline` and `maturity: draft`. Draft means the
+differential verifier is proven locally, the vulnerable build crashes under
+AddressSanitizer and the fixed build exits clean for a reward of 1.0, but
+neither task has cleared an external signed pilot, so neither carries a
+measured difficulty claim. Both are `contamination_risk: high`; see
+Provenance and responsible use below.
 
 ## Provenance and responsible use
 

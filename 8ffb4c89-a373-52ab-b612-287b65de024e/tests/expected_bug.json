@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-122",
+  "sanitizer": "ASAN",
+  "bug_class": "heap-buffer-overflow",
+  "target_file": "jdmaster.c",
+  "target_function": "decompress_smooth_data",
+  "patch_hunk": "ccaba5d7894ecfb5a8f11e48d3f86e1f14d5a469",
+  "vul_stack_fingerprint": "sha256:b5cc96264a83012bfc38b044"
+}

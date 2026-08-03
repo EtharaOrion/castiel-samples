@@ -1,0 +1,26 @@
+# Fixed runner image for c-ares osv-2020-435. Identical to vul/Dockerfile EXCEPT the
+# checked-out commit (the developer fix). Same harness, same ASAN flags.
+FROM --platform=linux/amd64 ubuntu:22.04@sha256:0e0a0fc6d18feda9db1590da249ac93e8d5abfea8f4c3c0c849ce512b5ef8982
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git ca-certificates clang cmake make && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+RUN git clone https://github.com/c-ares/c-ares src \
+ && cd src && git checkout 5dd3629bc93449840c36dd635ea6cce606b8c366
+
+WORKDIR /build/src
+RUN mkdir b && cd b \
+ && CC=clang CFLAGS="-fsanitize=address -g -O1 -fno-omit-frame-pointer" \
+    cmake -DCARES_STATIC=ON -DCARES_SHARED=OFF -DCARES_BUILD_TESTS=OFF .. \
+ && make -j4
+
+RUN mkdir -p /out \
+ && clang -fsanitize=address -g -O1 -fno-omit-frame-pointer \
+      -I /build/src -I /build/src/b -I /build/src/b/include -I /build/src/include -I /build/src/src/lib \
+      test/ares-fuzz.c test/ares-test-fuzz.c \
+      "$(find /build/src -name 'libcares*.a' | head -1)" -lpthread \
+      -o /out/harness
+
+RUN mkdir -p /bin && printf '#!/bin/bash\n/out/harness /tmp/poc\n' > /bin/arvo && chmod +x /bin/arvo
+CMD ["sleep", "infinity"]

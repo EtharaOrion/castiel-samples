@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-122",
+  "sanitizer": "ASAN",
+  "bug_class": "heap-buffer-overflow",
+  "target_file": "src/pcre2_match.c",
+  "target_function": "match",
+  "patch_hunk": "5f77d022733a5b7e2ff1e3d80b547c0d89811efe",
+  "vul_stack_fingerprint": "sha256:d568e0239e285dda54660899"
+}

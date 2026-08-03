@@ -1,0 +1,23 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x6310000249a0",
+  "top_frames": [
+    "decompress_smooth_data",
+    "process_data_context_main",
+    "jpeg_read_scanlines",
+    "tjDecompress2",
+    "LLVMFuzzerTestOneInput",
+    "fuzzer::Fuzzer::ExecuteCallback(unsigned",
+    "fuzzer::RunOneTest(fuzzer::Fuzzer*,",
+    "fuzzer::FuzzerDriver(int*,"
+  ],
+  "stack_fingerprint": "sha256:b5cc96264a83012bfc38b044",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x6310000249a0 thread T0\nREAD at 0x6310000249a0 thread T0\n    #0 in decompress_smooth_data jdmaster.c\n    #1 in process_data_context_main jdmainct.c\n    #2 in jpeg_read_scanlines jdapistd.c\n    #3 in tjDecompress2\n    #4 in LLVMFuzzerTestOneInput\n\nDEDUP_TOKEN: decompress_smooth_data--process_data_context_main--jpeg_read_scanlines\n0x6310000249a0 is located 0 bytes to the right of a heap region\nallocated by thread T0",
+  "reaches_target": null,
+  "exploit_primitive": null
+}
