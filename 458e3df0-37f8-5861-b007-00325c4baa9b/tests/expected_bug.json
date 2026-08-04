@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-125",
+  "sanitizer": "ASAN",
+  "bug_class": "global-buffer-overflow",
+  "target_file": "src/hb-cff-interp-cs-common.hh",
+  "target_function": "CFF::BlendArg::set_blends",
+  "patch_hunk": "72d8f76368b264a42fe58438fe15811d458a7935",
+  "vul_stack_fingerprint": "sha256:95b12fc72dab750a9b320fe2"
+}

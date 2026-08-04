@@ -1,0 +1,14 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x602000000010",
+  "top_frames": ["Json::OurReader::readComment", "Json::OurReader::readValue", "Json::OurReader::parse", "Json::OurCharReader::parse", "LLVMFuzzerTestOneInput"],
+  "stack_fingerprint": "sha256:561330cbecb34ec5cc8850ed",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: heap-buffer-overflow\n    #0 in Json::OurReader::readComment src/lib_json/json_reader.cpp\n    #1 in Json::OurReader::readValue\n    #2 in LLVMFuzzerTestOneInput src/test_lib_json/fuzz.cpp\n\nDEDUP_TOKEN: Json::OurReader::readComment--Json::OurReader::readValue--LLVMFuzzerTestOneInput",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

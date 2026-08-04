@@ -1,0 +1,21 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x602000000131",
+  "top_frames": [
+    "AAT::KerxSubTableFormat1::sanitize",
+    "AAT::KerxTable::sanitize",
+    "AAT::kerx::sanitize",
+    "hb_sanitize_context_t::check_range",
+    "hb_face_create",
+    "main"
+  ],
+  "stack_fingerprint": "sha256:9de65512e2b93ebfd845be04",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: heap-buffer-overflow on address 0x602000000131 thread T0\nREAD at 0x602000000131 thread T0\n    #0 in AAT::KerxSubTableFormat1::sanitize src/hb-aat-layout-kerx-table.hh\n    #1 in AAT::KerxTable::sanitize src/hb-aat-layout-kerx-table.hh\n    #2 in AAT::kerx::sanitize src/hb-aat-layout-kerx-table.hh\n    #3 in hb_face_create\n    #4 in main\n\nDEDUP_TOKEN: AAT::KerxSubTableFormat1::sanitize--AAT::KerxTable::sanitize--AAT::kerx::sanitize\n0x602000000131 is located 0 bytes to the right of a heap region\nallocated by thread T0",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

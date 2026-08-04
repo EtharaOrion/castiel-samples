@@ -1,0 +1,14 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "stack-buffer-overflow",
+  "bug_class": "stack-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x7fffffff0000",
+  "top_frames": ["ares_parse_aaaa_reply", "ares__parse_into_addrinfo", "LLVMFuzzerTestOneInput"],
+  "stack_fingerprint": "sha256:884be4f04db3967d87bb15a8",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: stack-buffer-overflow\n    #0 in ares_parse_aaaa_reply src/lib/ares_parse_aaaa_reply.c\n    #1 in ares__parse_into_addrinfo\n    #2 in LLVMFuzzerTestOneInput test/ares-test-fuzz.c\n\nDEDUP_TOKEN: ares_parse_aaaa_reply--ares__parse_into_addrinfo--LLVMFuzzerTestOneInput",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

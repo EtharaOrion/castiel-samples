@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-122",
+  "sanitizer": "ASAN",
+  "bug_class": "heap-buffer-overflow",
+  "target_file": "src/lib/openjp2/mct.c",
+  "target_function": "opj_mct_decode_real",
+  "patch_hunk": "cc893a4ebfaf8c42cf1221ac82c83df91e77340b",
+  "vul_stack_fingerprint": "sha256:286b4fa4893e216aff0dc15b"
+}

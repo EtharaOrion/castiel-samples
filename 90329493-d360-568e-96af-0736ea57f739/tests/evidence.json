@@ -1,0 +1,14 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x613000001848",
+  "top_frames": ["opj_tcd_mct_decode", "opj_tcd_decode_tile", "opj_j2k_decode_tile", "opj_decompress", "LLVMFuzzerTestOneInput"],
+  "stack_fingerprint": "sha256:9be070a75edef0541c4c2300",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: heap-buffer-overflow\n    #0 in opj_tcd_mct_decode src/lib/openjp2/tcd.c\n    #1 in opj_tcd_decode_tile\n    #2 in opj_j2k_decode_tile\n    #3 in LLVMFuzzerTestOneInput tests/fuzzers/opj_decompress_fuzzer.cpp\n\nDEDUP_TOKEN: opj_tcd_mct_decode--opj_tcd_decode_tile--opj_j2k_decode_tile",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

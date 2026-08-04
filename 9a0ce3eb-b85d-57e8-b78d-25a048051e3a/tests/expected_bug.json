@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-122",
+  "sanitizer": "ASAN",
+  "bug_class": "heap-buffer-overflow",
+  "target_file": "src/lib_json/json_reader.cpp",
+  "target_function": "Json::OurReader::readComment",
+  "patch_hunk": "2e33c218cbd53b8d016e9230c2f600411b6146b8",
+  "vul_stack_fingerprint": "sha256:561330cbecb34ec5cc8850ed"
+}

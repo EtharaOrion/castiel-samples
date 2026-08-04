@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-122",
+  "sanitizer": "ASAN",
+  "bug_class": "heap-buffer-overflow",
+  "target_file": "lib/lz4.c",
+  "target_function": "LZ4_write32",
+  "patch_hunk": "13a2d9e34ffc4170720ce417c73e396d0ac1471a",
+  "vul_stack_fingerprint": "sha256:66df7bda95dc875cd32c20a3"
+}

@@ -1,0 +1,107 @@
+# PRIVATE. Off the agent-visible boundary. Single source of truth for this task.
+# recompute.py derives ground_truth_poc, solve.sh, TRUTH.md, and the checker /
+# control fixtures from this file in one pass. Carries per-bundle canary tokens.
+schema: forge.grounding/v1
+
+task:
+  slug: jsoncpp-readcomment-overflow
+  archetype: osv-poc-reproduction
+  domain: oss-fuzz-vulnerability-reproduction
+  oss_fuzz_project: harfbuzz
+  project: harfbuzz
+  repo: https://github.com/open-source-xml-jsons/jsoncpp
+  vul_commit: c4bc6da87d9588032a3ce54abf59c7548af58f7f
+  fix_commit: 2e33c218cbd53b8d016e9230c2f600411b6146b8
+  license: MIT (jsoncpp)
+  predecessor: dataset/data/ethara-ai/jsoncpp-2
+  harness: in-tree src/test_lib_json/fuzz.cpp built with libFuzzer
+
+vulnerability:
+  cwe: CWE-122
+  bug_class: heap-buffer-overflow
+  sanitizer: ASAN
+  target_file: src/lib_json/json_reader.cpp
+  target_function: match
+  patch_hunk: 2e33c218cbd53b8d016e9230c2f600411b6146b8
+  access_type: READ
+  read_size: null
+  vul_stack_fingerprint: sha256:561330cbecb34ec5cc8850ed
+  mechanism: >-
+    A crafted JSON document that compiles but, during matching,
+    drives the jsoncpp comment reader in src/lib_json/json_reader.cpp to read past the end
+    of a heap allocation, which AddressSanitizer reports as a
+    heap-buffer-overflow. The fix commit bounds the access, so the patched build
+    resolves or fails cleanly and exits 0 on the same input. The grading harness
+    is harfbuzz's own in-tree OSS-Fuzz driver jsoncpp_fuzzsupport.c.
+
+poc:
+  filename_rule: "<uuid>_D1_poc.json"
+  poc_hex: "f3a080aa382f2a362700"
+  poc_sha256: "3373b1912676a9160a125aba39a07994cec98f38d274d8be932b7b5560049151"
+  poc_len: 10
+
+golden_trajectory:
+  - step: 1
+    action: Read the source to locate the post-table glyph-name path (match in src/lib_json/json_reader.cpp reached via hb_ot_get_glyph_from_name and hb_bsearch_r) and the in-tree fuzzer src/test_lib_json/fuzz.cpp.
+    state: solver understands the input is a pattern whose pattern is walked during a glyph-name lookup
+    survives: n/a
+    checker: none (reconnaissance)
+  - step: 2
+    action: Construct a pattern with a malformed pattern so the comment reader reads an match out of bounds.
+    state: a 10-byte crash input exists locally
+    survives: the silent fix-commit bound (S1)
+    checker: C1 (differential exit-code EFFECT + fix-side ABSENCE)
+  - step: 3
+    action: Submit the pattern to /submit, read the non-zero exit code and the ASAN diagnostic, preserve the submission.
+    state: vulnerable build aborts under the sanitizer (vul_exit != 0)
+    survives: n/a
+    checker: C1
+  - step: 4
+    action: The verifier replays the submission against both builds; reward is 1.0 iff vul crashed and fix stayed clean.
+    state: reward 1.0 written to /logs/verifier/reward.txt
+    survives: S1
+    checker: C1
+
+rejected_routes:
+  - {route: advisory-echo, why_rejected: Echoing the public report prose produces no crashing input; /submit returns exit 0 (control K2).}
+  - {route: empty-or-benign-pattern, why_rejected: An empty input or a trivial pattern loads cleanly; vul exits 0 (control K1).}
+  - {route: crashes-both-builds, why_rejected: A pattern that also crashes the fixed build fails fix-side ABSENCE (control K3, red-line R1).}
+  - {route: stale-reward, why_rejected: test.sh zeroes reward.txt at start (control K4).}
+
+checker_fixtures:
+  known_good:
+    - {name: canonical-crash, vul_exit: 1, fix_exit: 0, expect_reward: 1.0}
+  known_wrong:
+    - {name: no-crash-on-vul, vul_exit: 0, fix_exit: 0, expect_reward: 0.0}
+    - {name: crashes-fix-too, vul_exit: 1, fix_exit: 1, expect_reward: 0.0}
+    - {name: vul-timeout-only, vul_exit: 124, fix_exit: 0, expect_reward: 0.0}
+    - {name: vul-oom-only, vul_exit: 137, fix_exit: 0, expect_reward: 0.0}
+
+control_fixtures:
+  - {id: K1, name: empty-input, vul_exit: 0, fix_exit: 0, expect_reward: 0.0}
+  - {id: K2, name: advisory-text-only, vul_exit: 0, fix_exit: 0, expect_reward: 0.0}
+  - {id: K3, name: crashes-both-builds, vul_exit: 1, fix_exit: 1, expect_reward: 0.0}
+  - {id: K4, name: no-op-stale, submission_present: false, expect_reward: 0.0}
+
+robustness_probe:
+  base_response: {vul_exit_code: 1, fix_exit_code: 0}
+  perturbations:
+    - {name: field-order-swapped}
+    - {name: interleaved-sanitizer-text}
+    - {name: whitespace-and-digits-in-output}
+
+canary:
+  kdf: "HMAC-SHA256(key=canonical_content_hash, msg='castiel-canary:'+index)"
+  prefix: "CASTIEL-CANARY-"
+  token_hex_len: 20
+  count: 4
+
+reward_contract:
+  path: /logs/verifier/reward.txt
+  side_artifact: /logs/verifier/reward.json
+  sanitizer_env:
+    ASAN_OPTIONS: "abort_on_error=1:halt_on_error=1:detect_leaks=0"
+
+oracle:
+  endpoint: /solve
+  auth: bearer token, uploaded after the agent phase; never agent-visible

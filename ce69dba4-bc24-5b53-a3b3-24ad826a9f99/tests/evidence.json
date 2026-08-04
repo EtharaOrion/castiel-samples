@@ -1,0 +1,21 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "stack-buffer-overflow",
+  "bug_class": "stack-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x7fffffff0000",
+  "top_frames": [
+    "hb_array_t",
+    "OT::post::accelerator_t::cmp_key",
+    "hb_bsearch_r",
+    "OT::post::accelerator_t::get_glyph_from_name",
+    "hb_ot_get_glyph_from_name",
+    "LLVMFuzzerTestOneInput"
+  ],
+  "stack_fingerprint": "sha256:bfd0d484d65dc1f1361aeac9",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: stack-buffer-overflow on address 0x7fffffff0000 thread T0\nREAD at 0x7fffffff0000 thread T0\n    #0 in hb_array_t src/hb-array.hh\n    #1 in OT::post::accelerator_t::cmp_key src/hb-ot-post-table.hh\n    #2 in hb_bsearch_r hb-algs.hh\n    #3 in OT::post::accelerator_t::get_glyph_from_name src/hb-ot-post-table.hh\n    #4 in hb_ot_get_glyph_from_name src/hb-ot-font.cc\n    #5 in LLVMFuzzerTestOneInput test/fuzzing/hb-shape-fuzzer.cc\n\nDEDUP_TOKEN: hb_array_t--OT::post::accelerator_t::cmp_key--hb_bsearch_r",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

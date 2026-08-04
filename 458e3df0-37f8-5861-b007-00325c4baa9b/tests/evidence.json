@@ -1,0 +1,20 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "global-buffer-overflow",
+  "bug_class": "global-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x000000000000",
+  "top_frames": [
+    "CFF::BlendArg::set_blends",
+    "cff2_cs_opset_flatten",
+    "OT::cff2::accelerator_t::get_extents",
+    "hb_ot_get_glyph_extents",
+    "LLVMFuzzerTestOneInput"
+  ],
+  "stack_fingerprint": "sha256:95b12fc72dab750a9b320fe2",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: global-buffer-overflow\n    #0 in CFF::BlendArg::set_blends src/hb-cff-interp-cs-common.hh\n    #1 in cff2_cs_opset_flatten\n    #2 in OT::cff2::accelerator_t::get_extents\n    #3 in hb_ot_get_glyph_extents\n    #4 in LLVMFuzzerTestOneInput test/fuzzing/hb-shape-fuzzer.cc\n\nDEDUP_TOKEN: CFF::BlendArg::set_blends--cff2_cs_opset_flatten--OT::cff2::accelerator_t",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

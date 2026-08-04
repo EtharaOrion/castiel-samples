@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-121",
+  "sanitizer": "ASAN",
+  "bug_class": "stack-buffer-overflow",
+  "target_file": "src/lib/ares_parse_aaaa_reply.c",
+  "target_function": "ares_parse_aaaa_reply",
+  "patch_hunk": "b949cc3ddfbeb1b3fba571fb53b186b645e66e9c",
+  "vul_stack_fingerprint": "sha256:884be4f04db3967d87bb15a8"
+}

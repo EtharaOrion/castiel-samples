@@ -1,9 +1,0 @@
-{
-  "cwe": "CWE-122",
-  "sanitizer": "ASAN",
-  "bug_class": "heap-buffer-overflow",
-  "target_file": "src/lib_json/json_reader.cpp",
-  "target_function": "Json::OurReader::skipBom",
-  "patch_hunk": "6aba23f4a8628d599a9ef7fa4811c4ff6e4070e2",
-  "vul_stack_fingerprint": "sha256:f17cf0abbb448b9aff2ba23d"
-}

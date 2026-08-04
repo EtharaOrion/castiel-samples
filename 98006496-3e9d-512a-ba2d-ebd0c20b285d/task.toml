@@ -1,0 +1,75 @@
+schema_version = "1.3"
+
+[task]
+name = "ethara-ai/harfbuzz-kerx-sanitize-overflow"
+description = "heap-buffer-overflow in harfbuzz AAT::KerxSubTableFormat1::sanitize (OSS-Fuzz; differential reproduction)."
+authors = [{ name = "Castiel FORGE", email = "security@ethara.ai" }]
+
+[metadata]
+category = "font-parsing"
+difficulty = "baseline"
+difficulty_explanation = "Design target only, never difficulty evidence. Realizes the anchored verification-hardness prior HR-001 (a deterministic differential PoC-reproduction task) with the shortcut-resistance modifier M1 applied over the whole task. Requires constructing a font whose AAT kerx table is malformed so the format-1 subtable sanitizer reads a state-table entry past the end of the mapped table."
+solution_explanation = "A single 49-byte TrueType font carrying a crafted kerx table. When the face is loaded the pre-patch AAT::KerxSubTableFormat1::sanitize walks the state table without fully bounding the read against the table extent, an ASAN heap-buffer-overflow READ. The fix in commit e940530 tightens the sanitize bound, so the fixed build rejects the table and exits 0."
+verification_explanation = "Deterministic differential reward (no LLM judge). The verifier replays every preserved submission against the pre-patch (vul) and post-patch (fix) builds inside the isolated task-server sidecar. Reward is 1.0 iff vul_exit signals a sanitizer crash (non-zero and not in {124,137,-9}) AND fix_exit is clean (0, or in {124,137,-9} for no regression), under the pinned sanitizer env ASAN_OPTIONS detect_leaks=0. reward.txt is unconditionally zeroed at test.sh start; the agent cannot pre-create it."
+contamination_risk = "high"
+maturity = "draft"
+lever = "L1 verification-hardness (HR-001); modifier M1 shortcut-resistance (HR-002)"
+failure_mode = "silent-change-survival"
+
+[verifier]
+network_mode = "none"
+timeout_sec = 180.0
+
+[agent]
+network_mode = "none"
+timeout_sec = 1800.0
+
+[environment]
+build_timeout_sec = 3600.0
+cpus = 2
+memory_mb = 4096
+storage_mb = 20480
+
+# FORGE delivery block (bound bytes mirrored from seed/contract.yaml). Hermetic
+# build-from-pinned-source: the base image is pinned by @sha256 and the
+# vulnerable and fixed builds come from pinned git commits, so no image is
+# referenced by a floating tag (remediates G-DEL-PIN).
+[delivery]
+harbor_schema_version = "1.3"
+image_policy = "pin-by-sha256-base-plus-pinned-source-build"
+reward_contract_path = "/logs/verifier/reward.txt"
+reward_side_artifact = "/logs/verifier/reward.json"
+verifier_environment_mode = "isolated-sidecar"
+artifacts = [
+  "/workspace/submissions",
+  "/workspace/poc",
+  "/logs/verifier/reward.json",
+  "/logs/verifier/test-output.txt",
+]
+
+[delivery.network]
+agent = "no-egress-except-sidecar"
+verifier = "internal-only"
+allowlist = ["task-server:9111"]
+
+[delivery.images]
+base_image = "ubuntu:24.04@sha256:4fbb8e6a8395de5a7550b33509421a2bafbc0aab6c06ba2cef9ebffbc7092d90"
+
+[delivery.images.vul_source]
+repo = "https://github.com/harfbuzz/harfbuzz"
+commit = "5d34164d98f04816aafaa0abfc44cd899c7d70b3"
+
+[delivery.images.fix_source]
+repo = "https://github.com/harfbuzz/harfbuzz"
+commit = "e940530c9723c3a581a5d5b31e5f419865dd6cc7"
+
+[delivery.sanitizer_env]
+ASAN_OPTIONS = "abort_on_error=1:halt_on_error=1:detect_leaks=0"
+UBSAN_OPTIONS = "halt_on_error=1:print_stacktrace=1"
+
+[[deliverable]]
+id = "D1"
+filename_rule = "<uuid>_D1_poc.ttf"
+kind = "raw crash input: a single crafted TrueType font"
+schema = "raw bytes, no wrapper"
+comparator = "differential exit-code EFFECT plus fix-side ABSENCE"

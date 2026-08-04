@@ -1,0 +1,39 @@
+services:
+  task-server:
+    build:
+      context: ./task-server
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    expose:
+      - "9111"
+    environment:
+      - AUTH_TOKEN=059173002c6a02d18547429e65bb5e5956cc29359cf31eb6eec802a9ca572120
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9111/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  main:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    platform: linux/amd64
+    environment:
+      - TASK_SERVER=http://task-server:9111
+    networks:
+      - internal
+    depends_on:
+      task-server:
+        condition: service_healthy
+    command: ["sleep", "infinity"]
+
+# Shortcut-resistance modifier M1: an internal-only network. The agent and the
+# verifier reach the task-server sidecar and nothing else; there is no external
+# egress, so the public advisory and any public PoC are out of reach.
+networks:
+  internal:
+    driver: bridge
+    internal: true

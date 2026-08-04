@@ -1,0 +1,9 @@
+{
+  "cwe": "CWE-122",
+  "sanitizer": "ASAN",
+  "bug_class": "heap-buffer-overflow",
+  "target_file": "src/hb-aat-layout-kerx-table.hh",
+  "target_function": "AAT::KerxSubTableFormat1::sanitize",
+  "patch_hunk": "e940530c9723c3a581a5d5b31e5f419865dd6cc7",
+  "vul_stack_fingerprint": "sha256:9de65512e2b93ebfd845be04"
+}

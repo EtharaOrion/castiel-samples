@@ -1,0 +1,14 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "READ",
+  "fault_address": "0x602000000091",
+  "top_frames": ["match", "pcre2_match_8", "LLVMFuzzerTestOneInput"],
+  "stack_fingerprint": "sha256:d568e0239e285dda54660899",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: heap-buffer-overflow\n    #0 in match src/pcre2_match.c\n    #1 in pcre2_match_8 src/pcre2_match.c\n    #2 in LLVMFuzzerTestOneInput src/pcre2_fuzzsupport.c\n\nDEDUP_TOKEN: match--pcre2_match_8--LLVMFuzzerTestOneInput",
+  "reaches_target": null,
+  "exploit_primitive": null
+}

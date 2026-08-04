@@ -1,0 +1,14 @@
+{
+  "sanitizer_tool": "ASAN",
+  "sanitizer_class": "heap-buffer-overflow",
+  "bug_class": "heap-buffer-overflow",
+  "crash_signal": "SIGABRT",
+  "access_type": "WRITE",
+  "fault_address": "0x602000000010",
+  "top_frames": ["LZ4_write32", "LZ4_compress_generic", "LZ4_compress_fast_extState", "LLVMFuzzerTestOneInput"],
+  "stack_fingerprint": "sha256:66df7bda95dc875cd32c20a3",
+  "reached_harness": true,
+  "raw_excerpt": "==1==ERROR: AddressSanitizer: heap-buffer-overflow\n    #0 in LZ4_write32 lib/lz4.c\n    #1 in LZ4_compress_generic\n    #2 in LZ4_compress_fast_extState\n    #3 in LLVMFuzzerTestOneInput ossfuzz/compress_fuzzer.c\n\nDEDUP_TOKEN: LZ4_write32--LZ4_compress_generic--LZ4_compress_fast_extState",
+  "reaches_target": null,
+  "exploit_primitive": null
+}
